@@ -20,10 +20,6 @@ class PostgresDriverWrapperTest {
     this.postgresDriverWrapper = new PostgresDriverWrapper(urlPort, database, userName, password);
   }
 
-  @AfterEach
-  void tearDown() {
-  }
-
   @Test
   void testConnect() {
     Connection connection = postgresDriverWrapper.getConnection();
