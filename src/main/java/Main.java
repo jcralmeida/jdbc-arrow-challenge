@@ -12,11 +12,13 @@ public class Main {
 
     DBDriverWrapper driver = new PostgresDriverWrapper(urlPort, database, userName, password);
     VectorSchemaRoot vectorSchemaRoot = driver.executeQuery("select * from personaldata");
+    driver.getConnection().close();
 
     for (FieldVector fieldVector : vectorSchemaRoot.getFieldVectors()) {
       for (int i = 0; i < vectorSchemaRoot.getRowCount(); i++) {
         System.out.println(fieldVector.getObject(i));
       }
     }
+    vectorSchemaRoot.close();
   }
 }

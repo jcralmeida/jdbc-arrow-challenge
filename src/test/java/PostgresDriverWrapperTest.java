@@ -20,6 +20,11 @@ class PostgresDriverWrapperTest {
     this.postgresDriverWrapper = new PostgresDriverWrapper(urlPort, database, userName, password);
   }
 
+  @AfterEach
+  void tearDown() throws SQLException {
+    postgresDriverWrapper.getConnection().close();
+  }
+
   @Test
   void testConnect() {
     Connection connection = postgresDriverWrapper.getConnection();
@@ -28,12 +33,13 @@ class PostgresDriverWrapperTest {
 
   @Test
   void testExecuteQuery() throws SQLException {
-    VectorSchemaRoot vectorSchemaRoot = postgresDriverWrapper.executeQuery("select * from personaldata");
-    Assertions.assertEquals(vectorSchemaRoot.getRowCount(), 100);
-    Assertions.assertEquals(vectorSchemaRoot.getFieldVectors().size(), 3);
-    for (FieldVector fieldVector : vectorSchemaRoot.getFieldVectors()) {
-      for (int i = 0; i < 100; i++) {
-        Assertions.assertNotNull(fieldVector.getObject(i));
+    try (VectorSchemaRoot vectorSchemaRoot = postgresDriverWrapper.executeQuery("select * from personaldata")) {
+      Assertions.assertEquals(vectorSchemaRoot.getRowCount(), 100);
+      Assertions.assertEquals(vectorSchemaRoot.getFieldVectors().size(), 3);
+      for (FieldVector fieldVector : vectorSchemaRoot.getFieldVectors()) {
+        for (int i = 0; i < 100; i++) {
+          Assertions.assertNotNull(fieldVector.getObject(i));
+        }
       }
     }
   }

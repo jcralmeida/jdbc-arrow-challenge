@@ -8,4 +8,6 @@ public interface DBDriverWrapper {
   Connection connect(String host, String database, String userName, String password);
 
   VectorSchemaRoot executeQuery(String sqlQuery) throws SQLException;
+
+  Connection getConnection();
 }
