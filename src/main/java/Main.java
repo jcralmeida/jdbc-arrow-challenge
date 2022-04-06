@@ -4,15 +4,14 @@ import org.apache.arrow.vector.FieldVector;
 import org.apache.arrow.vector.VectorSchemaRoot;
 
 public class Main {
-  public static void main(String[] args) throws SQLException {
+  public static void main(String[] args) throws Exception {
     String userName = args[0];
     String password = args[1];
     String urlPort = args[2];
-    String database = args[3];
 
-    DBDriverWrapper driver = new PostgresDriverWrapper(urlPort, database, userName, password);
+    PostgresDriverWrapper driver = new PostgresDriverWrapper(urlPort, userName, password);
     VectorSchemaRoot vectorSchemaRoot = driver.executeQuery("select * from personaldata");
-    driver.getConnection().close();
+    driver.close();
 
     for (FieldVector fieldVector : vectorSchemaRoot.getFieldVectors()) {
       for (int i = 0; i < vectorSchemaRoot.getRowCount(); i++) {

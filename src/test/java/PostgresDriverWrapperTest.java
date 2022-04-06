@@ -12,22 +12,24 @@ class PostgresDriverWrapperTest {
   private PostgresDriverWrapper postgresDriverWrapper;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws SQLException {
     String userName = "postgres";
     String password = "postgres";
     String urlPort = "localhost:5432";
-    String database = "postgres";
-    this.postgresDriverWrapper = new PostgresDriverWrapper(urlPort, database, userName, password);
+    this.postgresDriverWrapper = new PostgresDriverWrapper(urlPort, userName, password);
   }
 
   @AfterEach
-  void tearDown() throws SQLException {
-    postgresDriverWrapper.getConnection().close();
+  void tearDown() throws Exception {
+    postgresDriverWrapper.close();
   }
 
   @Test
-  void testConnect() {
-    Connection connection = postgresDriverWrapper.getConnection();
+  void testConnect() throws SQLException {
+    String userName = "postgres";
+    String password = "postgres";
+    String urlPort = "localhost:5432";
+    Connection connection = postgresDriverWrapper.connect(userName, password, urlPort);
     Assertions.assertNotNull(connection);
   }
 
