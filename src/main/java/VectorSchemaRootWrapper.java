@@ -1,5 +1,6 @@
 import org.apache.arrow.memory.RootAllocator;
 import org.apache.arrow.vector.Float8Vector;
+import org.apache.arrow.vector.IntVector;
 import org.apache.arrow.vector.VarCharVector;
 import org.apache.arrow.vector.VectorSchemaRoot;
 import org.apache.arrow.vector.types.pojo.Schema;
@@ -16,12 +17,18 @@ public class VectorSchemaRootWrapper implements AutoCloseable {
 
   public void addDouble(double item, String fieldName, int count) {
     ((Float8Vector) vectorSchemaRoot.getVector(fieldName)).setSafe(count, item);
-    vectorSchemaRoot.setRowCount(count);
+  }
+
+  public void addInt(int item, String fieldName, int count) {
+    ((IntVector) vectorSchemaRoot.getVector(fieldName)).setSafe(count, item);
   }
 
   public void addVarchar(String item, String fieldName, int count) {
     ((VarCharVector) vectorSchemaRoot.getVector(fieldName)).setSafe(count, new Text(item));
-    vectorSchemaRoot.setRowCount(count);
+  }
+
+  public void updateRowCount(int rowCount) {
+    vectorSchemaRoot.setRowCount(rowCount);
   }
 
   public VectorSchemaRoot getVectorSchemaRoot() {

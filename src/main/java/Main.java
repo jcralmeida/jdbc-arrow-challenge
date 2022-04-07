@@ -10,6 +10,7 @@ public class Main {
     String urlPort = args[2];
 
     PostgresDriverWrapper driver = new PostgresDriverWrapper(urlPort, userName, password);
+    driver.connect();
     VectorSchemaRoot vectorSchemaRoot = driver.executeQuery("select * from personaldata");
     driver.close();
 
